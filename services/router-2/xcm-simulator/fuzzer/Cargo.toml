@@ -1,0 +1,51 @@
+[package]
+name = "xcm-simulator-fuzzer"
+description = "Examples of xcm-simulator usage."
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+publish = false
+
+[dependencies]
+codec = { package = "parity-scale-codec", version = "3.6.1" }
+honggfuzz = "0.5.55"
+arbitrary = "1.2.0"
+scale-info = { version = "2.5.0", features = ["derive"] }
+
+frame-system = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+frame-support = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+pallet-balances = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+pallet-message-queue = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+sp-std = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+sp-core = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+sp-runtime = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+sp-io = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+
+polkadot-core-primitives = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+polkadot-runtime-parachains = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+polkadot-parachain-primitives = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+
+xcm = { package = "staging-xcm", path = "../../" }
+xcm-builder = { package = "staging-xcm-builder", path = "../../xcm-builder" }
+xcm-executor = { package = "staging-xcm-executor", path = "../../xcm-executor" }
+xcm-simulator = { path = ".." }
+pallet-xcm = { path = "../../pallet-xcm" }
+
+[features]
+runtime-benchmarks = [
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-message-queue/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	"polkadot-parachain-primitives/runtime-benchmarks",
+	"polkadot-runtime-parachains/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+]
+
+[[bin]]
+path = "src/fuzz.rs"
+name = "xcm-fuzzer"
