@@ -4,6 +4,7 @@ out = 'out'
 libs = ['lib']
 remappings = [
     '@openzeppelin/contracts/=/home/bajrangi/Wins/AURA/contracts/node_modules/@openzeppelin/contracts/',
+    'forge-std/=/home/bajrangi/Wins/AURA/contracts/lib/forge-std/src/',
 ]
 
 [rpc_endpoints]
