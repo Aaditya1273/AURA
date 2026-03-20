@@ -21,5 +21,8 @@
             "pre-commit": "yarn lint:fix",
             "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
         }
+    },
+    "dependencies": {
+        "@openzeppelin/contracts": "^4.7.1"
     }
 }
