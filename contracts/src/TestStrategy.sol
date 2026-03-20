@@ -22,9 +22,10 @@ contract TestStrategy is BaseStrategy {
 
     constructor(address _vault) BaseStrategy(_vault) {}
 
-    function name() external view override returns (string memory) {
+    function name() external pure override returns (string memory) {
         return string(abi.encodePacked("TestStrategy ", apiVersion()));
     }
+
 
     // NOTE: This is a test-only function to simulate delegation
     function _toggleDelegation() public {
@@ -54,9 +55,10 @@ contract TestStrategy is BaseStrategy {
         want = _want;
     }
 
-    function ethToWant(uint256 amtInWei) public view override returns (uint256) {
+    function ethToWant(uint256 amtInWei) public pure override returns (uint256) {
         return amtInWei; // 1:1 conversion for testing
     }
+
 
     function estimatedTotalAssets() public view override returns (uint256) {
         // For mock, this is just everything we have
@@ -65,6 +67,7 @@ contract TestStrategy is BaseStrategy {
 
     function prepareReturn(uint256 _debtOutstanding)
         internal
+        view
         override
         returns (
             uint256 _profit,
@@ -72,6 +75,7 @@ contract TestStrategy is BaseStrategy {
             uint256 _debtPayment
         )
     {
+
         // During testing, send this contract some tokens to simulate "Rewards"
         uint256 totalAssets = want.balanceOf(address(this));
         uint256 totalDebt = vault.strategies(address(this)).totalDebt;
@@ -121,14 +125,17 @@ contract TestStrategy is BaseStrategy {
         // Nothing needed here because no additional tokens/tokenized positions for mock
     }
 
-    function protectedTokens() internal view override returns (address[] memory) {
+    function protectedTokens() internal pure override returns (address[] memory) {
         address[] memory protected = new address[](1);
         protected[0] = protectedToken;
         return protected;
     }
 
-    function liquidateAllPositions() internal override returns (uint256 amountFreed) {
+
+
+    function liquidateAllPositions() internal view override returns (uint256 amountFreed) {
         uint256 totalAssets = want.balanceOf(address(this));
         amountFreed = totalAssets;
     }
+
 }

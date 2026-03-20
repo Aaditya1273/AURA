@@ -6,7 +6,7 @@ import {AuraCommander} from "./AuraCommander.sol";
 import {TestStrategy} from "./TestStrategy.sol";
 import {Token} from "./Token.sol";
 import {AuraVerifier} from "./AuraVerifier.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20, IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 /**
  * @title AURA Deployment Script - ZK Enabled
@@ -25,7 +25,7 @@ contract DeployAura is Script {
         
         // 3. Deploy AuraCommander
         AuraCommander commander = new AuraCommander(
-            IERC20(address(token)),
+            IERC20Metadata(address(token)),
             "AURA Vault",
             "vAURA"
         );

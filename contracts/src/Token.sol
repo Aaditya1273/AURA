@@ -89,9 +89,11 @@ contract TokenFalseReturn is Token {
     }
 
     function transferFrom(
-        address sender,
-        address receiver,
-        uint256 amount
+        address /* sender */,
+        address /* receiver */,
+
+        uint256 /* amount */
+
     ) public virtual override returns (bool) {
         return false;
     }

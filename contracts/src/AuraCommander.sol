@@ -4,9 +4,12 @@ pragma solidity 0.8.15;
 import {ERC4626} from "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {BaseStrategy, StrategyParams} from "./AuraBaseStrategy.sol";
+import {IXcm, XCM_PRECOMPILE_ADDRESS} from "./IXcm.sol";
+
 
 interface IGroth16Verifier {
     function verifyProof(
@@ -33,6 +36,7 @@ contract AuraCommander is ERC4626, Ownable {
     uint256 public performanceFee = 1000;
     uint256 public constant MAX_BPS = 10000;
 
+
     // --- ZK CONFIG ---
     address public verifier;
 
@@ -41,9 +45,11 @@ contract AuraCommander is ERC4626, Ownable {
     event StrategyRemoved(address indexed strategy);
     event StrategyReported(address indexed strategy, uint256 gain, uint256 loss, uint256 debtPaid);
     event VerifiedReport(uint256 totalAssets, uint256 timestamp);
+    event XcmSent(bytes destination, bytes message);
+
 
     constructor(
-        IERC20 _asset,
+        IERC20Metadata _asset,
         string memory _name,
         string memory _symbol
     ) ERC4626(_asset) ERC20(_name, _symbol) {}
@@ -81,14 +87,77 @@ contract AuraCommander is ERC4626, Ownable {
         emit VerifiedReport(_totalAssets, block.timestamp);
     }
 
-    // --- Yearn-compatible Views ---
+    /**
+     * @notice Execute an XCM message via the Revive XCM Precompile.
+     * @param destination SCALE-encoded MultiLocation destination.
+     * @param message SCALE-encoded VersionedXCM message.
+     */
+    function executeXcm(bytes calldata destination, bytes calldata message) external onlyOwner {
+        IXcm(XCM_PRECOMPILE_ADDRESS).send(destination, message);
+        emit XcmSent(destination, message);
+    }
+
+
+    // --- VaultAPI / Yearn-compatible Views ---
 
     function apiVersion() external pure returns (string memory) {
         return "0.4.6";
     }
 
+    function token() external view returns (address) {
+        return asset();
+    }
+
+    function governance() external view returns (address) {
+        return owner();
+    }
+
+    function management() external view returns (address) {
+        return owner();
+    }
+
+    function guardian() external view returns (address) {
+        return owner();
+    }
+
     function totalAssets() public view override returns (uint256) {
         return IERC20(asset()).balanceOf(address(this)) + totalDebt;
+    }
+
+    function pricePerShare() external view returns (uint256) {
+        uint256 supply = totalSupply();
+        return supply == 0 ? 10**decimals() : (totalAssets() * 10**decimals()) / supply;
+
+    }
+
+    function depositLimit() external pure returns (uint256) {
+        return type(uint256).max;
+    }
+
+    function creditAvailable() external pure returns (uint256) {
+        return 0;
+    }
+
+    function debtOutstanding() external pure returns (uint256) {
+        return 0;
+    }
+
+    function expectedReturn() external pure returns (uint256) {
+        return 0;
+    }
+
+    // --- VaultAPI overloads for ERC-4626 ---
+
+    function deposit(uint256 amount, address recipient) public override returns (uint256) {
+        return super.deposit(amount, recipient);
+    }
+
+    function deposit(uint256 amount) external returns (uint256) {
+        return deposit(amount, msg.sender);
+    }
+
+    function withdraw(uint256 shares, address recipient) public returns (uint256) {
+        return super.withdraw(convertToAssets(shares), recipient, msg.sender);
     }
 
     // --- Yearn-compatible Actions ---
@@ -100,16 +169,27 @@ contract AuraCommander is ERC4626, Ownable {
     ) external returns (uint256) {
         require(strategies[msg.sender].activation > 0, "!strategy");
         StrategyParams storage params = strategies[msg.sender];
+        
         params.totalGain += _gain;
         params.totalLoss += _loss;
-        params.totalDebt -= (_debtPayment + _loss);
+        
+        // Update debt
+        if (_debtPayment + _loss <= params.totalDebt) {
+            params.totalDebt -= (_debtPayment + _loss);
+            totalDebt -= (_debtPayment + _loss);
+        } else {
+            totalDebt -= params.totalDebt;
+            params.totalDebt = 0;
+        }
+        
         params.lastReport = block.timestamp;
-        totalDebt -= (_debtPayment + _loss);
+
         if (_debtPayment > 0) {
             IERC20(asset()).safeTransferFrom(msg.sender, address(this), _debtPayment);
         }
+        
         emit StrategyReported(msg.sender, _gain, _loss, _debtPayment);
-        return 0;
+        return 0; // debtOutstanding
     }
 
     function addStrategy(

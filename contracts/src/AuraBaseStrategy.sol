@@ -2,8 +2,8 @@
 pragma solidity >=0.8.15;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
 
 struct StrategyParams {
     uint256 performanceFee;
@@ -326,27 +326,32 @@ abstract contract BaseStrategy {
         _;
     }
 
-    function _onlyAuthorized() internal {
+    function _onlyAuthorized() internal view {
         require(msg.sender == strategist || msg.sender == governance());
     }
 
-    function _onlyEmergencyAuthorized() internal {
+
+    function _onlyEmergencyAuthorized() internal view {
         require(msg.sender == strategist || msg.sender == governance() || msg.sender == vault.guardian() || msg.sender == vault.management());
     }
 
-    function _onlyStrategist() internal {
+
+    function _onlyStrategist() internal view {
         require(msg.sender == strategist);
     }
 
-    function _onlyGovernance() internal {
+
+    function _onlyGovernance() internal view {
         require(msg.sender == governance());
     }
 
-    function _onlyRewarder() internal {
+
+    function _onlyRewarder() internal view {
         require(msg.sender == governance() || msg.sender == strategist);
     }
 
-    function _onlyKeepers() internal {
+
+    function _onlyKeepers() internal view {
         require(
             msg.sender == keeper ||
                 msg.sender == strategist ||
@@ -356,9 +361,11 @@ abstract contract BaseStrategy {
         );
     }
 
-    function _onlyVaultManagers() internal {
+
+    function _onlyVaultManagers() internal view {
         require(msg.sender == vault.management() || msg.sender == governance());
     }
+
 
     constructor(address _vault) {
         _initialize(_vault, msg.sender, msg.sender, msg.sender);
@@ -564,9 +571,6 @@ abstract contract BaseStrategy {
      *      given 1e17 wei (0.1 ETH) as input, and want is USDC (6 decimals),
      *      with USDC/ETH = 1800, this should give back 1800000000 (180 USDC)
      *
-     * @param _amtInWei The amount (in wei/1e-18 ETH) to convert to `want`
-     * @return The amount in `want` of `_amtInEth` converted to `want`
-     **/
      * @param _amtInWei The amount (in wei/1e-18 ETH) to convert to `want`
      * @return The amount in `want` of `_amtInEth` converted to `want`
      **/
