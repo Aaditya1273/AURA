@@ -17,3 +17,4 @@ export * from "./triggers/scheduling";
 export * from "./triggers/types";
 export * from "./utils/number-parsing";
 export * from "./utils/spoken-text";
+export * from "./plugins/aura-hub/index";

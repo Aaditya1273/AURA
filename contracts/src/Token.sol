@@ -84,9 +84,10 @@ contract TokenNoReturn {
 contract TokenFalseReturn is Token {
     constructor(uint8 _decimals) Token(_decimals) {}
 
-    function transfer(address receiver, uint256 amount) public virtual override returns (bool) {
+    function transfer(address /* receiver */, uint256 /* amount */) public virtual override returns (bool) {
         return false;
     }
+
 
     function transferFrom(
         address /* sender */,

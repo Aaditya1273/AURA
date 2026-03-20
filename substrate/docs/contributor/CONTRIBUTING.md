@@ -1,4 +1,3 @@
-# Contributing
 
 The `Polkadot SDK` project is an **OPENISH Open Source Project**
 

@@ -2,7 +2,7 @@
 pragma solidity 0.8.15;
 
 /// @dev The on-chain address of the XCM (Cross-Consensus Messaging) precompile.
-address constant XCM_PRECOMPILE_ADDRESS = address(0xA0000);
+address constant XCM_PRECOMPILE_ADDRESS = address(0x00000000000000000000000000000000000a0000);
 
 /**
  * @title XCM Precompile Interface

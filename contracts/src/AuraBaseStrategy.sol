@@ -570,17 +570,17 @@ abstract contract BaseStrategy {
      *
      *      given 1e17 wei (0.1 ETH) as input, and want is USDC (6 decimals),
      *      with USDC/ETH = 1800, this should give back 1800000000 (180 USDC)
-     *
-     * @param _amtInWei The amount (in wei/1e-18 ETH) to convert to `want`
-     * @return The amount in `want` of `_amtInEth` converted to `want`
+     *     * @return The amount in `want` of `_amtInEth` converted to `want`
      **/
-    function ethToWant(uint256 _amtInWei) public view virtual returns (uint256) {
+
+    function ethToWant(uint256 /* _amtInWei */) public view virtual returns (uint256) {
         // NOTE: For Polkadot Hub (Revive EVM), 1 Wei matches the smallest native unit (Planck) 
         // given the 10^6 NativeToEthRatio and 12-decimal native token.
         // This must be overridden by specific strategies to use an oracle (e.g., Chainlink/Papi)
         // to get the exchange rate between the native token and the `want` token.
         return 0; 
     }
+
 
     /**
      * @notice
@@ -698,11 +698,11 @@ abstract contract BaseStrategy {
      *  `callCostInWei` must be priced in terms of `wei` (1e-18 ETH).
      *
      *  This call and `harvestTrigger()` should never return `true` at the same
-     *  time.
-     * @param callCostInWei The keeper's estimated gas cost to call `tend()` (in wei).
+     *  time.     *  time.
      * @return `true` if `tend()` should be called, `false` otherwise.
      */
-    function tendTrigger(uint256 callCostInWei) public view virtual returns (bool) {
+
+    function tendTrigger(uint256 /* callCostInWei */) public view virtual returns (bool) {
         // We usually don't need tend, but if there are positions that need
         // active maintainence, overriding this function is how you would
         // signal for that.
@@ -712,6 +712,7 @@ abstract contract BaseStrategy {
 
         return false;
     }
+
 
     /**
      * @notice
@@ -759,11 +760,11 @@ abstract contract BaseStrategy {
      *  This could be a script run off a desktop or cloud bot (e.g.
      *  https://github.com/iearn-finance/yearn-vaults/blob/main/scripts/keep.py),
      *  or via an integration with the Keep3r network (e.g.
-     *  https://github.com/Macarse/GenericKeep3rV2/blob/master/contracts/keep3r/GenericKeep3rV2.sol).
-     * @param callCostInWei The keeper's estimated gas cost to call `harvest()` (in wei).
+     *     *  https://github.com/Macarse/GenericKeep3rV2/blob/master/contracts/keep3r/GenericKeep3rV2.sol).
      * @return `true` if `harvest()` should be called, `false` otherwise.
      */
-    function harvestTrigger(uint256 callCostInWei) public view virtual returns (bool) {
+
+    function harvestTrigger(uint256 /* callCostInWei */) public view virtual returns (bool) {
         // Should not trigger if strategy is not active (no assets or no debtRatio)
         if (!isActive()) return false;
 
@@ -780,6 +781,7 @@ abstract contract BaseStrategy {
         // harvest our credit if it's above our threshold or return false
         return (vault.creditAvailable() > creditThreshold);
     }
+
 
     /**
      * @notice

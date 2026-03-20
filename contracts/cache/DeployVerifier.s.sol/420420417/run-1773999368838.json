@@ -1,0 +1,10 @@
+{
+  "transactions": [
+    {
+      "rpc": "https://eth-rpc-testnet.polkadot.io/"
+    },
+    {
+      "rpc": "https://eth-rpc-testnet.polkadot.io/"
+    }
+  ]
+}

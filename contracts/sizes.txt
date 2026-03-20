@@ -1,0 +1,152 @@
+Compiling 31 files with Solc 0.8.15
+Solc 0.8.15 finished in 360.20ms
+Compiler run successful with warnings:
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> src/AuraBaseStrategy.sol:570:24:
+    |
+570 |     function ethToWant(uint256 _amtInWei) public view virtual returns (uint256) {
+    |                        ^^^^^^^^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> src/AuraBaseStrategy.sol:698:26:
+    |
+698 |     function tendTrigger(uint256 callCostInWei) public view virtual returns (bool) {
+    |                          ^^^^^^^^^^^^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> src/AuraBaseStrategy.sol:759:29:
+    |
+759 |     function harvestTrigger(uint256 callCostInWei) public view virtual returns (bool) {
+    |                             ^^^^^^^^^^^^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> src/Token.sol:87:23:
+   |
+87 |     function transfer(address receiver, uint256 amount) public virtual override returns (bool) {
+   |                       ^^^^^^^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> src/Token.sol:87:41:
+   |
+87 |     function transfer(address receiver, uint256 amount) public virtual override returns (bool) {
+   |                                         ^^^^^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> src/Token.sol:92:9:
+   |
+92 |         address sender,
+   |         ^^^^^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> src/Token.sol:93:9:
+   |
+93 |         address receiver,
+   |         ^^^^^^^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> src/Token.sol:94:9:
+   |
+94 |         uint256 amount
+   |         ^^^^^^^^^^^^^^
+
+Warning (2018): Function state mutability can be restricted to view
+   --> src/AuraBaseStrategy.sol:329:5:
+    |
+329 |     function _onlyAuthorized() internal {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+   --> src/AuraBaseStrategy.sol:333:5:
+    |
+333 |     function _onlyEmergencyAuthorized() internal {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+   --> src/AuraBaseStrategy.sol:337:5:
+    |
+337 |     function _onlyStrategist() internal {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+   --> src/AuraBaseStrategy.sol:341:5:
+    |
+341 |     function _onlyGovernance() internal {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+   --> src/AuraBaseStrategy.sol:345:5:
+    |
+345 |     function _onlyRewarder() internal {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+   --> src/AuraBaseStrategy.sol:349:5:
+    |
+349 |     function _onlyKeepers() internal {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+   --> src/AuraBaseStrategy.sol:359:5:
+    |
+359 |     function _onlyVaultManagers() internal {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to pure
+  --> src/TestStrategy.sol:25:5:
+   |
+25 |     function name() external view override returns (string memory) {
+   |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to pure
+  --> src/TestStrategy.sol:57:5:
+   |
+57 |     function ethToWant(uint256 amtInWei) public view override returns (uint256) {
+   |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+  --> src/TestStrategy.sol:66:5:
+   |
+66 |     function prepareReturn(uint256 _debtOutstanding)
+   |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to pure
+   --> src/TestStrategy.sol:124:5:
+    |
+124 |     function protectedTokens() internal view override returns (address[] memory) {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+   --> src/TestStrategy.sol:130:5:
+    |
+130 |     function liquidateAllPositions() internal override returns (uint256 amountFreed) {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+
+╭-------------------+------------------+-------------------+--------------------+---------------------╮
+| Contract          | Runtime Size (B) | Initcode Size (B) | Runtime Margin (B) | Initcode Margin (B) |
++=====================================================================================================+
+| Address           | 86               | 166               | 24,490             | 48,986              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| AuraCommander     | 18,871           | 20,835            | 5,705              | 28,317              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| AuraVerifier      | 1,909            | 1,941             | 22,667             | 47,211              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| BaseFeeOracle     | 3,136            | 3,260             | 21,440             | 45,892              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| CommonHealthCheck | 4,567            | 4,746             | 20,009             | 44,406              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| ERC20             | 4,707            | 6,186             | 19,869             | 42,966              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| Math              | 86               | 166               | 24,490             | 48,986              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| SafeERC20         | 86               | 166               | 24,490             | 48,986              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| TestStrategy      | 18,331           | 22,693            | 6,245              | 26,459              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| Token             | 5,386            | 8,214             | 19,190             | 40,938              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| TokenFalseReturn  | 3,688            | 6,518             | 20,888             | 42,634              |
+|-------------------+------------------+-------------------+--------------------+---------------------|
+| TokenNoReturn     | 3,938            | 5,871             | 20,638             | 43,281              |
+╰-------------------+------------------+-------------------+--------------------+---------------------╯
+
